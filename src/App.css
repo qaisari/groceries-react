@@ -1,7 +1,11 @@
-.App {
-  text-align: center;
+.FilterableProductTable {
+  text-align: left;
+  margin: 10px 20px;
 }
 
+.ProductTable {
+  margin-top: 20px;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
