@@ -1,10 +1,11 @@
+import { useState } from 'react';
 import './App.css';
 
-function SearchBar() {
+function SearchBar({ setStock }) {
   return (
     <form>
       <input type='text' placeholder='Search...'/><br/>
-      <label><input type='checkbox'/> Only show products in stock</label>
+      <label><input type='checkbox' onChange={e => setStock(e.target.checked)} /> Only show products in stock</label>
     </form>
   );
 }
@@ -19,7 +20,7 @@ function ProductCategoryRow({category}) {
 
 function ProductRow({product}) {
   const name = product.stocked ? product.name :
-    <span style={{color: 'red'}}>{ product.name }</span>;
+    <span style={{color: "red"}}>{ product.name }</span>
   return (
     <tr>
       <td>{ name }</td>
@@ -29,7 +30,7 @@ function ProductRow({product}) {
 }
 
 function ProductTable({products}) {
-  const rows = [];
+  let rows = [];
   let lastCategory = null;
   products.forEach((product) => {
     if (product.category !== lastCategory) {
@@ -60,10 +61,11 @@ function ProductTable({products}) {
 }
 
 function FilterableProductTable({products}) {
+  const [stock, setStock] = useState(false);
   return (
     <div>
-      <SearchBar/>
-      <ProductTable products={ products }/>
+      <SearchBar setStock={setStock} />
+      <ProductTable products={ products.filter(product => !stock || product.stocked)} />
     </div>
   );
 }
