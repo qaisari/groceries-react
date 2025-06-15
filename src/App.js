@@ -1,10 +1,11 @@
+import { useState } from 'react';
 import './App.css';
 
-function SearchBar() {
+function SearchBar({setStock, setSearch}) {
   return (
     <form>
-      <input type='text' placeholder='Search...'/><br/>
-      <label><input type='checkbox'/> Only show products in stock</label>
+      <input type='text' placeholder='Search...' onChange={e => setSearch(e.target.value)}/><br/>
+      <label><input type='checkbox' onChange={e => setStock(e.target.checked)} /> Only show products in stock</label>
     </form>
   );
 }
@@ -17,9 +18,12 @@ function ProductCategoryRow({category}) {
   );
 }
 
-function ProductRow({product}) {
+function ProductRow({product, search}) {
   const name = product.stocked ? product.name :
     <span style={{color: 'red'}}>{ product.name }</span>;
+  if (!product.name.toLowerCase().includes(search.toLowerCase())) {
+    return null;
+  }
   return (
     <tr>
       <td>{ name }</td>
@@ -28,7 +32,7 @@ function ProductRow({product}) {
   );
 }
 
-function ProductTable({products}) {
+function ProductTable({products, search}) {
   const rows = [];
   let lastCategory = null;
   products.forEach((product) => {
@@ -42,6 +46,7 @@ function ProductTable({products}) {
     rows.push(
       <ProductRow 
         product={ product }
+        search={ search }
         key={ product.name } />
     );
     lastCategory = product.category;
@@ -60,10 +65,12 @@ function ProductTable({products}) {
 }
 
 function FilterableProductTable({products}) {
+  const [stock, setStock] = useState(false);
+  const [search, setSearch] = useState("");
   return (
     <div>
-      <SearchBar/>
-      <ProductTable products={ products }/>
+      <SearchBar setStock={setStock} setSearch={setSearch} />
+      <ProductTable products={ products.filter(product => !stock || product.stocked) } search={search}/>
     </div>
   );
 }
