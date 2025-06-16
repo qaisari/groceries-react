@@ -2,10 +2,17 @@ import { useState } from 'react';
 import './App.css';
 
 function SearchBar({setStock, setSearch}) {
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+  }
+  //In the line 15
+  // const handleCheckBox = (e) => {
+  //   setStock(e.target.checked);
+  // } 
   return (
     <form>
-      <input type='text' placeholder='Search...' onChange={e => setSearch(e.target.value)}/><br/>
-      <label><input type='checkbox' onChange={e => setStock(e.target.checked)} /> Only show products in stock</label>
+      <input type='text' placeholder='Search...' onChange={handleChange}/><br/>
+      <label><input type='checkbox' onChange={(e) => {setStock(e.target.checked)}} /> Only show products in stock</label>
     </form>
   );
 }
